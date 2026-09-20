@@ -114,7 +114,7 @@ function animateRender() { card.classList.add('changing'); setTimeout(() => { re
 function complete() {
   const monthly = Math.max(1, Math.ceil(answers.goal / (answers.timeline === '30 days' ? 1 : answers.timeline === '90 days' ? 3 : 6)));
   card.innerHTML = `<div class="complete-state"><span class="complete-mark">✓</span><p class="tiny-label">YOUR LOOP IS READY</p><h2>A first path toward <em>$${answers.goal.toLocaleString()}</em>.</h2><p>We’ll start with work that uses ${answers.strengths.slice(0, 2).join(' and ') || 'your available strengths'}, then test it in small, measurable steps.</p><div class="plan-preview"><span>FIRST MONTHLY TARGET</span><strong>$${monthly.toLocaleString()}</strong><span>EST. FOCUSED TIME</span><strong>${answers.hours} hrs / week</strong></div><button class="primary-button" type="button" id="restart">Start the first experiment <span>→</span></button></div>`;
-  card.querySelector('#restart').addEventListener('click', () => showToast('Your first experiment has been saved.');
+  card.querySelector('#restart').addEventListener('click', () => showToast('Your first experiment has been saved.'));
 }
 function showToast(message) { const toast = document.querySelector('#toast'); toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2200); }
 render();
