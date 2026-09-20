@@ -113,8 +113,48 @@ back.addEventListener('click', () => { if (step > 0) { step -= 1; animateRender(
 function animateRender() { card.classList.add('changing'); setTimeout(() => { render(); card.classList.remove('changing'); }, 160); }
 function complete() {
   const monthly = Math.max(1, Math.ceil(answers.goal / (answers.timeline === '30 days' ? 1 : answers.timeline === '90 days' ? 3 : 6)));
-  card.innerHTML = `<div class="complete-state"><span class="complete-mark">✓</span><p class="tiny-label">YOUR LOOP IS READY</p><h2>A first path toward <em>$${answers.goal.toLocaleString()}</em>.</h2><p>We’ll start with work that uses ${answers.strengths.slice(0, 2).join(' and ') || 'your available strengths'}, then test it in small, measurable steps.</p><div class="plan-preview"><span>FIRST MONTHLY TARGET</span><strong>$${monthly.toLocaleString()}</strong><span>EST. FOCUSED TIME</span><strong>${answers.hours} hrs / week</strong></div><button class="primary-button" type="button" id="restart">Start the first experiment <span>→</span></button></div>`;
-  card.querySelector('#restart').addEventListener('click', () => showToast('Your first experiment has been saved.'));
+  card.innerHTML = `<div class="complete-state"><span class="complete-mark">✓</span><p class="tiny-label">YOUR LOOP IS READY</p><h2>A first path toward <em>$${answers.goal.toLocaleString()}</em>.</h2><p>We’ll start with work that uses ${answers.strengths.slice(0, 2).join(' and ') || 'your available strengths'}, then test it in small, measurable steps.</p><div class="plan-preview"><span>FIRST MONTHLY TARGET</span><strong>$${monthly.toLocaleString()}</strong><span>EST. FOCUSED TIME</span><strong>${answers.hours} hrs / week</strong></div><button class="primary-button" type="button" id="monitor-loop">Open agent workspace <span>→</span></button></div>`;
+  card.querySelector('#monitor-loop').addEventListener('click', () => renderMonitor(monthly));
+}
+
+function renderMonitor(monthly) {
+  const strengths = answers.strengths.slice(0, 2).join(' + ') || 'available strengths';
+  card.innerHTML = `<section class="monitor" aria-labelledby="monitor-title">
+    <div class="monitor-header"><div><p class="tiny-label">LIVE AGENT WORKSPACE</p><h2 id="monitor-title">Your loop is in motion.</h2></div><div class="agent-status"><span class="pulse-dot"></span><span id="agent-status">ANALYZING</span></div></div>
+    <div class="monitor-summary"><div><span>GOAL</span><strong>$${answers.goal.toLocaleString()} in ${answers.timeline}</strong></div><div><span>WORKING WITH</span><strong>${strengths}</strong></div><div><span>WEEKLY CAPACITY</span><strong>${answers.hours} focused hrs</strong></div></div>
+    <div class="agent-grid"><div class="agent-panel"><div class="panel-heading"><div><span class="panel-kicker">AGENT TRACE</span><h3>What the agent is doing</h3></div><span class="trace-count" id="trace-count">01 / 04</span></div><ol class="agent-trace" id="agent-trace">
+      <li class="active"><span class="trace-icon">01</span><div><strong>Reading your starting point</strong><p>Balancing your runway, time, and responsibilities.</p></div><time>now</time></li>
+      <li><span class="trace-icon">02</span><div><strong>Finding low-risk paths</strong><p>Matching immediate options to your strengths.</p></div><time>queued</time></li>
+      <li><span class="trace-icon">03</span><div><strong>Designing a first experiment</strong><p>Setting a small test with a clear measure of progress.</p></div><time>queued</time></li>
+      <li><span class="trace-icon">04</span><div><strong>Preparing your weekly check-in</strong><p>Creating signals to learn from and adapt next week.</p></div><time>queued</time></li>
+    </ol></div>
+    <aside class="agent-panel recommendation"><span class="panel-kicker">CURRENT RECOMMENDATION</span><h3>Build toward <em>$${monthly.toLocaleString()}</em> this month.</h3><p>Start with one service-oriented experiment that can use ${strengths}. The agent will make the next action visible here as soon as this pass is complete.</p><div class="confidence"><span>PLAN CONFIDENCE</span><b><i></i></b><strong>72%</strong></div><button class="secondary-button" id="run-agent" type="button">Run next agent step <span>→</span></button></aside></div>
+    <p class="monitor-note">The agent records its decisions here—so you can see what it considered, what it chose, and what happens next.</p>
+  </section>`;
+  card.querySelector('#run-agent').addEventListener('click', runAgentStep);
+}
+
+function runAgentStep() {
+  const active = card.querySelector('.agent-trace .active');
+  const nextStep = active?.nextElementSibling;
+  if (!nextStep) { showToast('Your first experiment is ready to review.'); return; }
+  const status = card.querySelector('#agent-status');
+  const button = card.querySelector('#run-agent');
+  status.textContent = 'WORKING';
+  button.disabled = true;
+  button.innerHTML = 'Agent is working <span>···</span>';
+  setTimeout(() => {
+    active.classList.replace('active', 'done');
+    active.querySelector('time').textContent = 'done';
+    nextStep.classList.add('active');
+    nextStep.querySelector('time').textContent = 'now';
+    const position = [...card.querySelectorAll('.agent-trace li')].indexOf(nextStep) + 1;
+    card.querySelector('#trace-count').textContent = `0${position} / 04`;
+    status.textContent = position === 4 ? 'READY' : 'ANALYZING';
+    button.disabled = false;
+    button.innerHTML = position === 4 ? 'Review first experiment <span>→</span>' : 'Run next agent step <span>→</span>';
+    showToast(`Step ${position} is now visible in your agent trace.`);
+  }, 700);
 }
 function showToast(message) { const toast = document.querySelector('#toast'); toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2200); }
 render();
