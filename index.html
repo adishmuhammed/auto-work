@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f4ef" />
+    <title>Pathfinder — a clearer next move</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="#"><span class="brand-mark">↗</span> pathfinder</a>
+        <div class="topbar-right"><span class="live-dot"></span><span>PRIVATE SESSION</span></div>
+      </header>
+
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow">PERSONAL DECISION LOOP <span></span> 01</div>
+        <h1 id="page-title">A clearer next move<br />starts with <em>where you are.</em></h1>
+        <p class="lede">Before we explore paths, tell us about your real starting point. We’ll turn it into a practical loop—not a generic plan.</p>
+      </section>
+
+      <section class="progress-section" aria-label="Questionnaire progress">
+        <div class="progress-copy"><span>YOUR STARTING POINT</span><span id="progress-text">1 of 5</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      </section>
+
+      <section class="question-card" id="question-card">
+        <div class="question-head">
+          <span class="question-number" id="question-number">01</span>
+          <span class="question-kind" id="question-kind">BASELINE</span>
+        </div>
+        <div id="question-content"></div>
+        <div class="card-footer">
+          <button class="text-button" id="back-button" type="button">← Back</button>
+          <button class="primary-button" id="next-button" type="button">Continue <span>→</span></button>
+        </div>
+      </section>
+
+      <section class="how-it-works" aria-label="How Pathfinder works">
+        <div><span class="tiny-label">WHAT HAPPENS NEXT</span><h2>Advice is only useful when it learns.</h2></div>
+        <div class="loop-steps">
+          <article><b>01</b><h3>Map</h3><p>Your reality, energy, constraints, and target.</p></article>
+          <article><b>02</b><h3>Try</h3><p>A small, grounded move—not a moonshot.</p></article>
+          <article><b>03</b><h3>Learn</h3><p>Track time, risk, money, and how it felt.</p></article>
+          <article><b>04</b><h3>Adapt</h3><p>The next move gets sharper with every loop.</p></article>
+        </div>
+      </section>
+    </main>
+    <div class="toast" id="toast" role="status"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
